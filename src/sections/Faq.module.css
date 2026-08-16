@@ -10,6 +10,20 @@
   border-radius: var(--radius-sm);
   background: var(--surface);
   overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.item:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* 開いている項目は枠と地色で分かるようにする。畳んだ項目が並ぶ中で
+   「いまどれを読んでいるか」を見失わないため。 */
+.item[open] {
+  border-color: var(--accent-soft-border);
+  background: linear-gradient(180deg, var(--accent-soft), var(--surface) 64px);
 }
 
 .question {
@@ -20,8 +34,10 @@
   padding: 20px 24px;
   font-size: 15px;
   font-weight: 700;
+  color: var(--text);
   cursor: pointer;
   list-style: none;
+  transition: color 0.2s ease;
 }
 
 /* Safari の既定マーカーを消す（Chrome/Firefox は list-style: none で消える）。 */
@@ -29,16 +45,30 @@
   display: none;
 }
 
-/* 開閉マークは CSS だけで描く（アイコン画像を増やさない）。 */
+.question:hover,
+.item[open] .question {
+  color: var(--accent);
+}
+
+/* 開閉マークは CSS だけで描く（アイコン画像を増やさない）。
+   色は currentColor なので、上の文字色の変化にそのまま追従する。 */
 .question::after {
   content: "";
   width: 9px;
   height: 9px;
   flex: none;
-  border-right: 2px solid var(--muted);
-  border-bottom: 2px solid var(--muted);
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  color: var(--muted);
   transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform 0.2s ease;
+  transition:
+    transform 0.22s ease,
+    color 0.2s ease;
+}
+
+.question:hover::after,
+.item[open] .question::after {
+  color: var(--accent);
 }
 
 .item[open] .question::after {
@@ -51,8 +81,30 @@
   font-size: 14px;
 }
 
+/* details は開閉自体をアニメーションできないので、開いた中身だけを軽く出す。 */
+.item[open] .answer {
+  animation: answerIn 0.24s ease;
+}
+
+@keyframes answerIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .item,
+  .question,
   .question::after {
     transition: none;
+  }
+
+  .item[open] .answer {
+    animation: none;
   }
 }

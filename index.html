@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
+    <!-- スクロール出現アニメーションの「初期状態を隠す」CSS は html.js の中だけに効く。
+         この 1 行が動かない環境（JS 無効・スクリプト読み込み失敗）では class が付かず、
+         本文は最初から表示されたままになる。⚠ 描画前に実行する必要があるので head に置く。 -->
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+
     <title>StreamDock｜配信ツールをまとめて起動・停止できるデスクトップアプリ</title>
     <meta
       name="description"

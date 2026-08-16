@@ -1,0 +1,25 @@
+.reveal {
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ⚠ 初期状態を隠すのは `html.js` の中だけ。この class は index.html の
+   インラインスクリプトが付ける。スクリプトが動かなければ付かないので、
+   その場合は最初から見えたままになる（JS 頼みで真っ白にしない）。 */
+:global(html.js) .reveal:not(.isVisible) {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* 動きを減らす設定の人には、出現アニメーションをせず最初から見せる。 */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+  }
+
+  :global(html.js) .reveal:not(.isVisible) {
+    opacity: 1;
+    transform: none;
+  }
+}
