@@ -1,0 +1,43 @@
+.list {
+  display: grid;
+  gap: 14px;
+}
+
+.columns {
+  composes: list;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  column-gap: 40px;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* チェックマークは画像を使わず CSS だけで描く（外部アセットを増やさない）。 */
+.mark {
+  width: 18px;
+  height: 18px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft-border);
+  position: relative;
+  flex: none;
+}
+
+.mark::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 3px;
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(42deg);
+}

@@ -1,0 +1,222 @@
+/* ============================================================
+   右下に追従するダウンロードボタン
+   「浮いている」感じは ①強めの落ち影 ②背景から浮く半透明の縁
+   ③ホバーでわずかに持ち上がる の 3 点で作る。
+   ============================================================ */
+
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  min-height: 54px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+
+  background: var(--btn-launch-bg);
+  color: var(--btn-primary-fg);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+
+  box-shadow:
+    0 18px 40px color-mix(in srgb, var(--color-accent) 32%, transparent),
+    0 6px 16px color-mix(in srgb, #05070d 35%, transparent);
+
+  /* 既定は「隠れている」状態。表示は .fabVisible が担う。 */
+  opacity: 0;
+  transform: translateY(14px) scale(0.96);
+  pointer-events: none;
+  transition:
+    opacity 0.24s ease,
+    transform 0.24s ease,
+    box-shadow 0.2s ease;
+}
+
+.fabVisible {
+  composes: fab;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.fab:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 24px 52px color-mix(in srgb, var(--color-accent) 40%, transparent),
+    0 8px 20px color-mix(in srgb, #05070d 40%, transparent);
+}
+
+.fab:active {
+  transform: translateY(-1px);
+}
+
+.icon {
+  flex: none;
+}
+
+/* ============================================================
+   OS 選択ダイアログ（ネイティブ <dialog>）
+   ============================================================ */
+
+.dialog {
+  width: min(420px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-soft);
+}
+
+.dialog::backdrop {
+  background: color-mix(in srgb, #05070d 62%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.panel {
+  padding: 24px;
+  display: grid;
+  gap: 20px;
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.close {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.close:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.options {
+  display: grid;
+  gap: 10px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.option:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.optionMain {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.optionLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft-border);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.optionMeta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* 右端の「＞」。アイコン画像を増やさないため CSS で描く。 */
+.optionArrow {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--muted);
+  border-top: 2px solid var(--muted);
+  transform: rotate(45deg);
+}
+
+.note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.version {
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .fab {
+    right: 16px;
+    bottom: 16px;
+    min-height: 50px;
+    padding: 0 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab,
+  .option {
+    transition: none;
+  }
+
+  .fab:hover,
+  .fab:active,
+  .option:hover {
+    transform: none;
+  }
+}

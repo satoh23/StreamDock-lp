@@ -1,0 +1,81 @@
+/* 配色トークン。StreamDock 本体の apps/desktop/src/styles/theme.css から、
+   LP で必要なものだけを移植している。値を変えるときは本体と揃えること
+   （アプリと LP の見た目が食い違うと、別プロダクトに見える）。
+
+   本体と同じく **ダークが既定**で、OS がライト設定のときだけ seed を差し替える。
+   役割トークンは color-mix 派生なので、seed を替えれば自動で追従する。 */
+
+:root {
+  /* --- seed palette (dark) --- */
+  --color-background: #090d18;
+  --color-surface: #111827;
+  --color-surface-elevated: #1b2435;
+  --color-border: #2d3748;
+  --color-text: #f9fafb;
+  --color-text-muted: #9ca3af;
+  --color-text-inverse: #090d18;
+  --color-primary: #2f6bff;
+  --color-secondary: #22d3ee;
+  --color-accent: #a78bfa;
+
+  /* --- role tokens --- */
+  --bg: var(--color-background);
+  --surface: var(--color-surface);
+  --surface-2: var(--color-surface-elevated);
+  --surface-subtle: color-mix(in srgb, var(--color-text) 4%, transparent);
+
+  --line: var(--color-border);
+  --border-soft: color-mix(in srgb, var(--color-text) 8%, transparent);
+
+  --text: var(--color-text);
+  --muted: var(--color-text-muted);
+  --text-inverse: var(--color-text-inverse);
+
+  --primary: var(--color-primary);
+  --primary-soft: color-mix(in srgb, var(--primary) 12%, transparent);
+  --primary-soft-border: color-mix(in srgb, var(--primary) 32%, transparent);
+
+  /* 「安全」を一目で示す用（プライバシーのセクション専用）。緑は他で使わない。 */
+  --ok: #4ade80;
+  --ok-soft: color-mix(in srgb, var(--ok) 12%, transparent);
+  --ok-border: color-mix(in srgb, var(--ok) 30%, transparent);
+
+  --accent: var(--color-secondary);
+  --accent-2: var(--color-accent);
+  --accent-soft: color-mix(in srgb, var(--accent) 10%, transparent);
+  --accent-soft-border: color-mix(in srgb, var(--accent) 20%, transparent);
+
+  /* 本体の「一括起動」ボタンと同じグラデ。LP でも主 CTA だけに使う。 */
+  --btn-launch-bg: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+  --btn-primary-fg: var(--text);
+
+  --radius: 18px;
+  --radius-sm: 10px;
+
+  /* LP 固有（本体には無い） */
+  --page-max: 1080px;
+  --page-pad: 24px;
+  --section-gap: 120px;
+  --shadow-soft: 0 24px 64px color-mix(in srgb, #05070d 45%, transparent);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-background: #f7f8fa;
+    --color-surface: #ffffff;
+    --color-surface-elevated: #eef2f7;
+    --color-border: #d7dee8;
+    --color-text: #111827;
+    --color-text-muted: #6b7280;
+    --color-text-inverse: #ffffff;
+    --color-primary: #0036cb;
+    --color-secondary: #00a3b5;
+    --color-accent: #7c3aed;
+
+    /* ダーク前提の派生だけ個別に上書きする（本体 theme.css と同じ扱い）。 */
+    --btn-primary-fg: var(--color-text-inverse);
+    /* 白地では明るい緑がほぼ見えないので、本体 theme.css のライト値へ差し替える。 */
+    --ok: #16a34a;
+    --shadow-soft: 0 24px 64px color-mix(in srgb, #64748b 22%, transparent);
+  }
+}

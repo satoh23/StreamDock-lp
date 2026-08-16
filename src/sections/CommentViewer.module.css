@@ -1,0 +1,84 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px 24px;
+}
+
+.card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* 最終行を全幅で使う横長カード。画像と文章を横に並べる。 */
+.wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 40px;
+  align-items: center;
+  margin-top: 16px;
+  padding: 32px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+/* 2 枚並ぶので、向きを交互にして単調にならないようにする。 */
+.wideReverse {
+  composes: wide;
+}
+
+.wideReverse .wideCopy {
+  order: 2;
+}
+
+.wideCopy {
+  display: grid;
+  gap: 14px;
+  text-align: left;
+}
+
+.wideLabel {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.wideBody {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wide {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  /* 縦積みになったら向きの入れ替えはやめ、常に「文章 → 画像」にする。 */
+  .wideReverse .wideCopy {
+    order: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wide {
+    padding: 24px 20px;
+  }
+}

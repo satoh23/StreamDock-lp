@@ -1,0 +1,7 @@
+node_modules/
+dist/
+# プリレンダリング用の中間生成物（prerender.mjs が消すが、途中で失敗すると残る）
+dist-ssr/
+.DS_Store
+*.local
+.vscode/

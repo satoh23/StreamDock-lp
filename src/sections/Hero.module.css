@@ -1,0 +1,88 @@
+.hero {
+  position: relative;
+  padding: 96px var(--page-pad) 120px;
+  overflow: hidden;
+}
+
+/* 上部にごく淡い色を敷いて、以降のセクションとの切れ目を作る。 */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 520px;
+  background: radial-gradient(
+    900px 420px at 18% 0%,
+    var(--accent-soft),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 56px;
+  align-items: center;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.brand {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+.title {
+  font-size: clamp(30px, 5vw, 46px);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+}
+
+/* 「何のアプリか」→「何が起きるか」の 2 行。.copy の gap（24px）だと離れすぎるので、
+   この 2 行だけ小さい行間でまとめる。 */
+.leadBlock {
+  display: grid;
+  gap: 10px;
+}
+
+.intro {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 38ch;
+}
+
+.visual {
+  filter: drop-shadow(var(--shadow-soft));
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding: 64px var(--page-pad) 80px;
+  }
+
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .title br {
+    display: none;
+  }
+}

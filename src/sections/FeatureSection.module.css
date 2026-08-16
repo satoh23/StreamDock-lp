@@ -1,0 +1,70 @@
+.section {
+  padding: var(--section-gap) var(--page-pad);
+}
+
+.inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+}
+
+.innerReverse {
+  composes: inner;
+}
+
+.innerReverse .copy {
+  order: 2;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.title {
+  font-size: clamp(24px, 3.4vw, 34px);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.visual {
+  filter: drop-shadow(var(--shadow-soft));
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 72px var(--page-pad);
+  }
+
+  .inner,
+  .innerReverse {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  /* 画面が狭いときは、向きの入れ替えをやめて常に「文章 → 画像」にする。 */
+  .innerReverse .copy {
+    order: 0;
+  }
+
+  /* 見出しの明示改行は広い画面での調整なので、狭い画面では自然な折り返しに任せる。 */
+  .title br {
+    display: none;
+  }
+}

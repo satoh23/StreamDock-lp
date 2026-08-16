@@ -1,0 +1,72 @@
+/* 箇条書きではなくカードで並べる。読まずに眺めただけで「4 つとも安全側」と
+   分かることが目的なので、緑のチェックと短い見出しを一定間隔で繰り返す。 */
+
+.points {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.point {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "check label"
+    ".     body";
+  gap: 6px 14px;
+  align-items: center;
+  padding: 26px 24px;
+  border: 1px solid var(--ok-border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  text-align: left;
+}
+
+.check {
+  grid-area: check;
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ok-soft);
+  border: 1px solid var(--ok-border);
+}
+
+/* チェックマークは画像を使わず、2 辺の枠線を回して描く。 */
+.check::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 7px;
+  width: 6px;
+  height: 11px;
+  border-right: 2px solid var(--ok);
+  border-bottom: 2px solid var(--ok);
+  transform: rotate(42deg);
+}
+
+.label {
+  grid-area: label;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.body {
+  grid-area: body;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 720px) {
+  .points {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .point {
+    padding: 22px 20px;
+  }
+}

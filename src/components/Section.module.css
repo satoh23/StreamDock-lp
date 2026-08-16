@@ -1,0 +1,66 @@
+.section {
+  padding: var(--section-gap) var(--page-pad);
+}
+
+.tinted {
+  composes: section;
+  background: var(--surface-subtle);
+  border-block: 1px solid var(--border-soft);
+}
+
+.inner {
+  max-width: var(--page-max);
+  margin: 0 auto;
+}
+
+/* Section は画像を持たないセクション専用（画像付きは FeatureSection）。
+   隣に並ぶものが無いので、左寄せにすると右側が空いて重心が偏る。中央に置く。
+
+   ⚠ 幅の指定に ch を使わないこと。ch は「0」の字幅（半角）が基準なので、
+   全角の日本語では想定の半分の文字数しか入らず、見出しが不必要に折り返す。
+   見出しは px、本文は em（＝全角 1 文字ぶん）で指定する。 */
+.header {
+  max-width: 860px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: clamp(24px, 3.4vw, 36px);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+/* 本文は 1 行 40 文字前後が読みやすいので、見出しより狭く保つ。 */
+.lead {
+  max-width: 40em;
+  margin: 18px auto 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+@media (max-width: 720px) {
+  .section,
+  .tinted {
+    padding: 72px var(--page-pad);
+  }
+
+  .header {
+    margin-bottom: 32px;
+  }
+
+  /* 見出しの明示改行は広い画面での見え方の調整なので、
+     狭い画面では自然な折り返しに任せる。 */
+  .title br {
+    display: none;
+  }
+}

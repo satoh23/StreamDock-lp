@@ -1,0 +1,156 @@
+/* gap は矢印を置く場所でもある。狭めると矢印がカードに重なる。 */
+.journey {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  margin-bottom: 56px;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* 2 段目以降に色を持たせて「StreamDock が担当する範囲」を示す。
+   1 段目「思いつく」だけは配信者自身がやることなので淡いまま。 */
+.stepActive {
+  composes: step;
+  color: var(--text);
+  border-color: var(--accent-soft-border);
+  background: linear-gradient(180deg, var(--accent-soft), var(--surface));
+}
+
+.stepNumber {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.stepActive .stepNumber {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--color-background);
+  opacity: 1;
+}
+
+.stepLabel {
+  font-weight: 600;
+}
+
+/* 段と段のあいだの「＞」。順番に進む流れであることを示す。
+   画像を使わず、正方形の隣り合う 2 辺だけ枠線を引いて 45 度回して作る。 */
+.step::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 9px);
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid var(--muted);
+  border-right: 2px solid var(--muted);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+/* 最後の段の右には次が無いので出さない。 */
+.journey li:last-child::after {
+  content: none;
+}
+
+/* ここはページ内で唯一「読み手自身の声」を出す面なので、いちばん目に留まる形にする。
+   チャットの吹き出し（＝StreamDock の OBS オーバーレイと同じ意匠）で左右交互に並べ、
+   実際に誰かが言っている発言に見せる。 */
+.voices {
+  display: grid;
+  gap: 22px;
+  max-width: 760px;
+  margin: 0 auto 56px;
+}
+
+.voiceLeft {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.voiceRight {
+  composes: voiceLeft;
+  justify-content: flex-end;
+}
+
+.bubble {
+  position: relative;
+  max-width: 30em;
+  padding: 20px 26px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px color-mix(in srgb, #05070d 18%, transparent);
+
+  /* 中央寄せの面だが、吹き出しの中だけは発言なので左揃えにする。 */
+  text-align: left;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.8;
+}
+
+/* しっぽ。枠線と地色が合うよう、正方形を 45 度回して隣り合う 2 辺だけ枠線を引く。 */
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  width: 13px;
+  height: 13px;
+  background: var(--surface-2);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+
+.voiceLeft .bubble::after {
+  left: 30px;
+}
+
+.voiceRight .bubble::after {
+  right: 30px;
+}
+
+.conclusion {
+  font-size: 17px;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* 2 列に折り返すと「2 → 3」だけ改行をまたぐことになり、矢印の向きが嘘になる。
+   横に並べきれない幅では 1 列にして、矢印を下向きに回す。 */
+@media (max-width: 860px) {
+  .journey {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .step::after {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) rotate(135deg);
+  }
+}
