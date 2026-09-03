@@ -63,6 +63,12 @@ export function Screenshot({
   const [playable, setPlayable] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
+  // 拡大ダイアログを開いているか。中身はこれが true の間だけ描く。
+  // ⚠ 常に描いてしまうと、閉じているのに同じ素材が 2 枚 DOM に居座る
+  //   （プリレンダリングした HTML にも alt が 2 回入るし、動画は要素が 2 本
+  //   ぶら下がって裏で再生され続ける）。<dialog> 自体は ref のため残す。
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     if (!video) return;
 
@@ -148,7 +154,10 @@ export function Screenshot({
       <button
         type="button"
         className={styles.trigger}
-        onClick={() => dialogRef.current?.showModal()}
+        onClick={() => {
+          setOpen(true);
+          dialogRef.current?.showModal();
+        }}
       >
         {renderMedia(false)}
         <span className={styles.srOnly}>{alt}（クリックで拡大）</span>
@@ -158,41 +167,45 @@ export function Screenshot({
         ref={dialogRef}
         className={styles.dialog}
         aria-label={alt}
+        // Esc でも閉じられるので、閉じたことは close イベントで受ける。
+        onClose={() => setOpen(false)}
         // 背景（::backdrop）のクリックで閉じる。dialog 自身が押されたときだけ反応する。
         onClick={(event) => {
           if (event.target === dialogRef.current) dialogRef.current.close();
         }}
       >
-        <div className={styles.panel}>
-          <button
-            type="button"
-            className={styles.close}
-            onClick={() => dialogRef.current?.close()}
-            aria-label="閉じる"
-          >
-            ×
-          </button>
+        {open && (
+          <div className={styles.panel}>
+            <button
+              type="button"
+              className={styles.close}
+              onClick={() => dialogRef.current?.close()}
+              aria-label="閉じる"
+            >
+              ×
+            </button>
 
-          {/*
-            ⚠ 幅は max-width ではなく width で与えること。max-width だけだと
-            .panel の justify-items: center で実寸まで縮み、拡大にならない。
+            {/*
+              ⚠ 幅は max-width ではなく width で与えること。max-width だけだと
+              .panel の justify-items: center で実寸まで縮み、拡大にならない。
 
-            上限は viewport から決める。縦は 84vh に収めたいので、縦横比から
-            幅へ換算して min() に混ぜている ＝ letterbox も歪みも出ない。
-          */}
-          <div
-            className={styles.zoomBox}
-            style={
-              {
-                "--zoom-width": `min(92vw, calc(84vh * ${(width / height).toFixed(4)}))`,
-              } as React.CSSProperties
-            }
-          >
-            {renderMedia(true)}
+              上限は viewport から決める。縦は 84vh に収めたいので、縦横比から
+              幅へ換算して min() に混ぜている ＝ letterbox も歪みも出ない。
+            */}
+            <div
+              className={styles.zoomBox}
+              style={
+                {
+                  "--zoom-width": `min(92vw, calc(84vh * ${(width / height).toFixed(4)}))`,
+                } as React.CSSProperties
+              }
+            >
+              {renderMedia(true)}
+            </div>
+
+            {caption && <p className={styles.caption}>{caption}</p>}
           </div>
-
-          {caption && <p className={styles.caption}>{caption}</p>}
-        </div>
+        )}
       </dialog>
     </>
   );
