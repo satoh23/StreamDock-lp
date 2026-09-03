@@ -48,6 +48,8 @@
 }
 
 .legal {
+  display: grid;
+  gap: 8px;
   max-width: var(--page-max);
   margin: 40px auto 0;
   padding-top: 24px;

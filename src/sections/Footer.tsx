@@ -28,10 +28,15 @@ export function Footer() {
         </nav>
       </div>
 
+      {/* ⚠ VOICEVOX の利用規約は「VOICEVOX を利用したことがわかるクレジット表記」を
+          求めている（https://voicevox.hiroshiba.jp/term/）。この 1 行を消さないこと。
+          ⚠ 商標の注記は個別列挙ではなく包括表記にしてある。スクリーンショットに
+          写るアプリが増えても書き換え漏れが起きないため。 */}
       <div className={styles.legal}>
+        <p>読み上げ機能は、音声合成ソフトウェア VOICEVOX と連携します。</p>
         <p>
-          OBS Studio / VOICEVOX / YouTube / Twitch
-          は各提供元の商標です。StreamDock はこれらと連携する機能を持ちますが、各提供元と公式に提携しているものではありません。
+          本ページに記載・表示されている会社名・製品名・ロゴは、各提供元の商標または登録商標です。StreamDock
+          はこれらと連携する機能を持ちますが、各提供元と公式に提携しているものではありません。
         </p>
       </div>
     </footer>
