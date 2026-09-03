@@ -13,7 +13,9 @@ export function Footer() {
         </div>
 
         <nav className={styles.nav}>
-          <a className={styles.link} href="#problem">
+          {/* ⚠ #problem は「よくある悩み」なので、ここから飛ばさない。
+              できること＝機能の説明が始まる最初のセクションへ送る。 */}
+          <a className={styles.link} href="#presets">
             できること
           </a>
           <a className={styles.link} href="#start">
