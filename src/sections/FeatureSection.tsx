@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { FeatureList } from "../components/FeatureList";
-import { Placeholder } from "../components/Placeholder";
 import styles from "./FeatureSection.module.css";
 
 type Props = {
@@ -10,7 +9,8 @@ type Props = {
   title: ReactNode;
   lead: string;
   items: string[];
-  media: { label: string; ratio?: string; motion?: boolean };
+  /** 右（または左）に置く絵。実素材なら <Screenshot>、未撮影なら <Placeholder>。 */
+  visual: ReactNode;
   /** 画像を左に置く（機能セクションを 2 つ並べたときに向きを交互にする）。 */
   reverse?: boolean;
 };
@@ -21,7 +21,7 @@ export function FeatureSection({
   title,
   lead,
   items,
-  media,
+  visual,
   reverse = false,
 }: Props) {
   return (
@@ -34,9 +34,7 @@ export function FeatureSection({
           <FeatureList items={items} />
         </div>
 
-        <div className={styles.visual}>
-          <Placeholder label={media.label} ratio={media.ratio} motion={media.motion} />
-        </div>
+        <div className={styles.visual}>{visual}</div>
       </div>
     </section>
   );

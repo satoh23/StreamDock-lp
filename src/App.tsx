@@ -1,5 +1,6 @@
 import { FloatingDownload } from "./components/FloatingDownload";
 import { Reveal } from "./components/Reveal";
+import { Screenshot } from "./components/Screenshot";
 import { ComingSoon } from "./sections/ComingSoon";
 import { CommentViewer } from "./sections/CommentViewer";
 import { Faq } from "./sections/Faq";
@@ -38,11 +39,17 @@ export default function App() {
             "まとめてでも、1つずつでも起動・停止できます",
             "アプリのほか、Web ページも登録できます",
           ]}
-          media={{
-            label:
-              "プリセットの起動ボタンを押して、複数のツールが順番に立ち上がるところ",
-            motion: true,
-          }}
+          visual={
+            <Screenshot
+              name="presets-launch"
+              width={1200}
+              height={750}
+              dark
+              video
+              alt="StreamDock で「一括起動」を押すと、プリセットに登録したコメントビューア・OBS・OneComme・VOICEVOX・視聴者管理ツールが順番に立ち上がっていく様子。"
+              caption="「一括起動」を押すと、登録した順にツールが立ち上がります。いくつ起動できたかは左上に出ます。"
+            />
+          }
         />
       </Reveal>
 

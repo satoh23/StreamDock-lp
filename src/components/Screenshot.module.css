@@ -1,0 +1,145 @@
+/* ============================================================
+   ページ内に置かれるスクリーンショット
+   ============================================================ */
+
+/* クリックできることを示すが、見た目は画像のまま（枠も余白も足さない）。 */
+.trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: zoom-in;
+}
+
+/* アプリの画面は周囲との明度差が大きいので、枠を 1 本入れて境目を作る
+   （枠が無いと、同系色の背景で画像の端が溶けてどこまでが画面か分からない）。 */
+.media {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  transition: border-color 0.2s ease;
+}
+
+.trigger:hover .media {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* 目には見せず、読み上げにだけ渡す。ボタンの名前が画像の alt だけだと
+   「押せる」ことが伝わらないため。 */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   拡大表示（ネイティブ <dialog>）
+   ============================================================ */
+
+.dialog {
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background: color-mix(in srgb, #05070d 74%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.panel {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  justify-items: center;
+}
+
+/* ⚠ --zoom-width はインラインで入る（viewport と縦横比から算出）。
+   ここで width を指定しないと中身の実寸のままになり、.panel の
+   justify-items: center と相まって「拡大したのに大きくならない」が起きる。 */
+.zoomBox {
+  width: var(--zoom-width, 100%);
+}
+
+/* <picture> は source を選ぶだけの入れ物なので箱を持たせない。 */
+.picture {
+  display: contents;
+}
+
+.zoomMedia {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: 0 40px 90px color-mix(in srgb, #05070d 55%, transparent);
+}
+
+.caption {
+  max-width: 60em;
+  color: color-mix(in srgb, #ffffff 82%, transparent);
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: center;
+  /* 背景の映像を選ばず読めるよう、文字側に地を持たせる。 */
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #05070d 62%, transparent);
+}
+
+.close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  z-index: 1;
+
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, #ffffff 22%, transparent);
+  background: color-mix(in srgb, #05070d 82%, transparent);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.close:hover {
+  background: color-mix(in srgb, #05070d 96%, transparent);
+  transform: scale(1.06);
+}
+
+@media (max-width: 600px) {
+  /* 画面が狭いと画像の外に出したボタンが見切れるので、内側へ寄せる。 */
+  .close {
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media,
+  .close {
+    transition: none;
+  }
+
+  .close:hover {
+    transform: none;
+  }
+}

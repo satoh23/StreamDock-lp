@@ -1,5 +1,5 @@
 import { DownloadButtons } from "../components/DownloadButtons";
-import { Placeholder } from "../components/Placeholder";
+import { Screenshot } from "../components/Screenshot";
 import styles from "./Hero.module.css";
 
 export function Hero() {
@@ -33,9 +33,13 @@ export function Hero() {
         </div>
 
         <div className={styles.visual}>
-          <Placeholder
-            label="プリセット一覧の画面（起動ボタンが見えている状態）"
-            ratio="16 / 10"
+          <Screenshot
+            name="hero-preset"
+            width={982}
+            height={614}
+            dark
+            priority
+            alt="StreamDock のプリセット画面。「雑談配信用」というプリセットに、コメントビューア・OBS・OneComme・VOICEVOX・視聴者管理ツール・Google Chrome の 6 つが起動順に並んでいる。右上の「一括起動」ボタンでまとめて起動できる。"
           />
         </div>
       </div>
