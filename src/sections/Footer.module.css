@@ -27,7 +27,8 @@
 .tagline {
   color: var(--muted);
   font-size: 13px;
-  max-width: 34ch;
+  /* ⚠ ch ではなく em（全角 1 文字ぶん）で指定する。理由は Section.module.css 参照。 */
+  max-width: 22em;
 }
 
 .nav {

@@ -28,7 +28,8 @@
 .label {
   font-size: 14px;
   color: var(--text);
-  max-width: 30ch;
+  /* ⚠ ch ではなく em（全角 1 文字ぶん）で指定する。理由は Section.module.css 参照。 */
+  max-width: 18em;
   line-height: 1.6;
 }
 
