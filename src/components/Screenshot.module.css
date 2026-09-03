@@ -44,13 +44,25 @@
    拡大表示（ネイティブ <dialog>）
    ============================================================ */
 
+/* ⚠ <dialog> の既定の max-width / max-height（どちらも calc(100% - 6px - 2em)）
+   だと拡大した素材が入りきらないので広げる。ただし単純に none で外すと、
+   素材＋説明が画面より縦に大きくなったとき（説明が長い・スマホの横向きなど）に
+   はみ出した部分へ届かなくなるので、ダイアログ自体をスクロールさせる。
+
+   ⚠ dvh に対応しない環境のため vh も先に書く（無効な宣言だけが捨てられ、
+   max-height が既定値のままになるのを防ぐ）。
+   ⚠ 閉じるボタンは枠の外へ 14px はみ出している。overflow を auto にすると
+   切り取られるので、先に余白でその分を確保しておくこと。 */
 .dialog {
-  max-width: none;
-  max-height: none;
-  padding: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
+  padding: 32px;
   border: 0;
   background: none;
-  overflow: visible;
+  overflow: auto;
+  /* 端まで送っても背後のページが動き出さないようにする。 */
+  overscroll-behavior: contain;
 }
 
 .dialog::backdrop {
@@ -130,6 +142,11 @@
   .close {
     top: 8px;
     right: 8px;
+  }
+
+  /* ボタンが内側に入るぶん、はみ出しぶんの余白は要らなくなる。 */
+  .dialog {
+    padding: 0;
   }
 }
 

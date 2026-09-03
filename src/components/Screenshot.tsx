@@ -196,7 +196,7 @@ export function Screenshot({
               className={styles.zoomBox}
               style={
                 {
-                  "--zoom-width": `min(92vw, calc(84vh * ${(width / height).toFixed(4)}))`,
+                  "--zoom-width": `min(88vw, calc(84vh * ${(width / height).toFixed(4)}))`,
                 } as React.CSSProperties
               }
             >
