@@ -35,8 +35,8 @@ export function Hero() {
         <div className={styles.visual}>
           <Screenshot
             name="hero-preset"
-            width={982}
-            height={614}
+            width={980}
+            height={612}
             dark
             priority
             alt="StreamDock のプリセット画面。「雑談配信用」というプリセットに、コメントビューア・OBS・OneComme・VOICEVOX・視聴者管理ツール・Google Chrome の 6 つが起動順に並んでいる。右上の「一括起動」ボタンでまとめて起動できる。"
