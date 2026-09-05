@@ -79,15 +79,30 @@ const FEATURES = [
   },
 ];
 
+type Highlight = {
+  label: string;
+  body: string;
+  /** 画像 1 枚のとき。未撮影枠に出す説明文。 */
+  media?: string;
+  /** 動く素材を想定する枠か。 */
+  motion?: boolean;
+  /**
+   * 画像 2 枚で「押す前 → 押した後」を見せるとき。
+   * ⚠ これがあるカードだけ文章が上・画像が下の 1 列になる（`wideSteps`）。
+   * 横並び 2 枚を右カラムへ押し込むと 1 枚 241px まで縮んで中身が読めないため。
+   */
+  steps?: { media: string; caption: string }[];
+};
+
 /**
- * 目玉の 4 つ。上のグリッドと同じ大きさで並べると埋もれるので全幅で見せる。
+ * 目玉の 5 つ。上のグリッドと同じ大きさで並べると埋もれるので全幅で見せる。
  *
  * ⚠ 配信エフェクトはアプリ上は別画面（ヘッダーの「OBSエフェクト」）だが、
  * 発火はコメント取得に依存する（`EffectOverlayApp` は購読するだけで、
  * `startSession` を呼ぶのは `CommentViewerApp` だけ）。コメントビューアで接続して
  * いなければ一度も発火しないので、使う人から見た区切りに合わせてここへ置く。
  */
-const HIGHLIGHTS = [
+const HIGHLIGHTS: Highlight[] = [
   {
     label: "コメントや投げ銭に反応する配信エフェクト",
     body: "決めた言葉が入ったコメントが来たときや、投げ銭が届いたときに、配信画面へ演出を重ねて表示できます。",
@@ -107,6 +122,29 @@ const HIGHLIGHTS = [
     //   言うと食い違う。書くなら本体の表記を戻すのが先。
     body: "壁紙のプレゼント、配信中だけ語尾を変える。景品は配信者が自由に決められるので、視聴者がコメントしたくなるきっかけを用意できます。景品は 1 つの表に並べるだけで、当選確率は入力した重みから自動で計算されます。Twitch では、チャンネルポイントのカスタム報酬でも回せます。",
     media: "ガチャの景品と当選確率を設定している画面",
+  },
+  {
+    label: "まだ読んでいない投げ銭が一目でわかる",
+    // ⚠ 「見逃さない」とは書かない（結果の約束になる）。他の目玉も
+    //   「〜がわかるサマリー」「〜がわかる視聴者詳細」と、できることの記述で揃えている。
+    // ⚠ 既読になる契機は「ピルを押して全文ダイアログを開いたとき」。スクロールや
+    //   時間経過では既読にならない（MonetaryTicker.tsx の 047b の注記が正）。
+    // ⚠ 既読の表現は減光（opacity 0.45）＋ ✓。色チャネルは金額のティアが
+    //   占有しているので色では示せない。「色が変わる」と書かないこと。
+    body: "届いた投げ銭は、コメントとは別に画面の上へまとまって出ます。誰がいくら投げてくれたかが一覧になり、押すとコメントの全文を読めます。読んだ投げ銭は暗くなってチェックが付くので、まだ開いていないものだけが明るく残ります。帯の左には未読の件数も出ます。",
+    // ⚠⚠ 素材は**未読（明るい）と既読（暗い＋✓）が両方写っていること**。
+    //   全部未読だと対比が無く、「一目でわかる」が画像から読み取れない
+    //   （「初見がわかる UI」で同じ失敗をしている）。
+    steps: [
+      {
+        media: "投げ銭の一覧（未読は明るく、既読は暗く ✓ が付いている状態）",
+        caption: "投げ銭は一覧にまとまって出ます",
+      },
+      {
+        media: "投げ銭を押して、全文のダイアログが開いているところ",
+        caption: "押すと全文が開き、暗くなります",
+      },
+    ],
   },
   {
     label: "配信ごとのレイドや投げ銭がわかるサマリー",
@@ -150,17 +188,42 @@ export function CommentViewer() {
           </li>
         ))}
 
-        {/* 並び順は配信の時系列（配信中の演出・ガチャ → 配信後のサマリー → 視聴者の履歴）。 */}
+        {/* 並び順は配信の時系列
+            （配信中の演出・ガチャ・投げ銭 → 配信後のサマリー → 視聴者の履歴）。 */}
         {HIGHLIGHTS.map((item, index) => (
           <li
             key={item.label}
-            className={index % 2 === 1 ? styles.wideReverse : styles.wide}
+            className={
+              // 2 枚組のカードは全幅 1 列なので、左右の入れ替えの対象にしない。
+              item.steps
+                ? styles.wideSteps
+                : index % 2 === 1
+                  ? styles.wideReverse
+                  : styles.wide
+            }
           >
             <div className={styles.wideCopy}>
               <p className={styles.wideLabel}>{item.label}</p>
               <p className={styles.wideBody}>{item.body}</p>
             </div>
-            <Placeholder label={item.media} ratio="16 / 10" motion={item.motion} />
+
+            {item.steps ? (
+              <ol className={styles.steps}>
+                {item.steps.map((step, stepIndex) => (
+                  <li key={step.media} className={styles.step}>
+                    <Placeholder label={step.media} ratio="16 / 10" />
+                    <p className={styles.stepCaption}>
+                      <span className={styles.stepNumber}>{stepIndex + 1}</span>
+                      {step.caption}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              item.media && (
+                <Placeholder label={item.media} ratio="16 / 10" motion={item.motion} />
+              )
+            )}
           </li>
         ))}
       </ul>

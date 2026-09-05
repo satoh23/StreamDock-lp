@@ -40,6 +40,62 @@
   order: 2;
 }
 
+/* 画像 2 枚で「押す前 → 押した後」を見せるカード。
+   ⚠ 2 枚を右カラムへ押し込むと 1 枚 241px まで縮んで中身が読めないので、
+   このカードだけ文章を上・画像を下の 1 列にする（1 枚あたり約 496px）。
+   ⚠ .wide より後に置くこと。composes は両方のクラスが当たるだけなので、
+   同じ詳細度の指定はソース順で決まる。 */
+.wideSteps {
+  composes: wide;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 28px;
+}
+
+/* ⚠ 1 列にしたぶん文章が全幅（約 1016px）まで伸びるので、読み幅を戻す。
+   横並びのカードでは右の画像が幅を止めていた役目を、ここでは自分で持つ。
+   ⚠ ch ではなく em（全角 1 文字ぶん）で指定する。理由は Section.module.css 参照。 */
+.wideSteps .wideCopy {
+  max-width: 40em;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.step {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.stepCaption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: left;
+}
+
+/* 手順であることを示す番号。文章側の順序（押す前 → 押した後）と対応する。 */
+.stepNumber {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft-border);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .wideCopy {
   display: grid;
   gap: 14px;
@@ -70,6 +126,13 @@
   /* 縦積みになったら向きの入れ替えはやめ、常に「文章 → 画像」にする。 */
   .wideReverse .wideCopy {
     order: 0;
+  }
+}
+
+/* 2 枚並びは 1 枚 340px を切ると中身が読めないので、その手前で縦積みにする。 */
+@media (max-width: 720px) {
+  .steps {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
