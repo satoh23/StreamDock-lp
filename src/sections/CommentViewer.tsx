@@ -15,12 +15,20 @@ import styles from "./CommentViewer.module.css";
  * ⚠ 縦横比はまだ 1.46〜2.82 と揃っていないので、`frame` で 16:10 の枠に収める。
  * 中は切らないので、余った分は枠の地色になる。
  *
- * ⚠ ダーク素材はまだ無いので `dark` は付けない（置いてから true にする）。
+ * ⚠ ダーク素材は `<name>-dark.png` に置き、ライトと**同じ縦横比**で切ること
+ * （比が違うと枠の埋まり方がテーマ切り替えで変わる）。実測の差は 0.0〜0.2%。
+ * ⚠ 配信画面のオーバーレイだけは地が黒なので、ライトの 1 枚を両テーマで使い回す
+ * （`dark: false`）。
+ *
+ * ⚠⚠ ダークの素材は元が非 Retina（同じ画面でライトの約半分の解像度）。
+ * 一覧では 73〜90% で表示するので読めるが、Retina のディスプレイでは
+ * わずかに甘い。撮り直すなら Retina で。
  */
 const FEATURES = [
   {
     label: "YouTube と Twitch のコメント同時取得",
     name: "cv-multi-platform",
+    dark: true,
     width: 860,
     height: 540,
     alt: "コメント一覧の一部。Twitch と YouTube のコメントが交互に並び、各行の左に配信サービスのバッジが付いている。",
@@ -28,6 +36,7 @@ const FEATURES = [
   {
     label: "一目で初見や久しぶりの視聴者がわかる UI",
     name: "cv-first-time",
+    dark: true,
     width: 590,
     height: 404,
     alt: "コメント一覧の一部。各行の名前の左に「初見」バッジが付いていて、初めて来た視聴者がひと目でわかる。",
@@ -35,6 +44,7 @@ const FEATURES = [
   {
     label: "右クリックで気になるコメントを簡単に固定",
     name: "cv-pin",
+    dark: true,
     width: 440,
     height: 275,
     alt: "一覧の上に固定したコメント。「固定」バッジの付いた行が一番上にとどまり、その下では新しいコメントが流れ続けている。",
@@ -42,6 +52,7 @@ const FEATURES = [
   {
     label: "VOICEVOX と連携したコメント読み上げ",
     name: "cv-voicevox",
+    dark: true,
     width: 790,
     height: 280,
     alt: "読み上げの設定。読み上げる文字数の上限、話者、スタイルを選べて、その場で試聴できる。",
@@ -49,6 +60,7 @@ const FEATURES = [
   {
     label: "ワンクリックで配信画面にコメントを表示",
     name: "cv-overlay",
+    dark: false,
     width: 490,
     height: 310,
     alt: "配信画面に重ねたコメント。視聴者名と配信サービスのバッジが付いた吹き出しが縦に並んでいる。",
@@ -56,6 +68,7 @@ const FEATURES = [
   {
     label: "視聴者ごとのメモ",
     name: "cv-memo",
+    dark: true,
     width: 830,
     height: 367,
     alt: "視聴者詳細の「配信者メモ」欄。その視聴者について書き込んだメモが保存されている。",
@@ -126,6 +139,7 @@ export function CommentViewer() {
               width={feature.width}
               height={feature.height}
               alt={feature.alt}
+              dark={feature.dark}
               frame="16 / 10"
             />
             <p className={styles.label}>{feature.label}</p>
