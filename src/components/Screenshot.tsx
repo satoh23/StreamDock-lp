@@ -28,6 +28,14 @@ type Props = {
   /** 最初の画面に入る素材なら true（遅延読み込みをやめ、優先して取りに行く）。 */
   priority?: boolean;
   /**
+   * 一覧に置くときの枠の縦横比（例 "16 / 10"）。
+   *
+   * 素材の縦横比がまちまちでもカードの高さを揃えたいときに渡す。中の素材は
+   * **切らずに収める**（`object-fit: contain`）ので、余った分は枠の地色になる。
+   * ⚠ 拡大表示には効かない（そちらは常に素材そのものの縦横比で出す）。
+   */
+  frame?: string;
+  /**
    * 拡大表示したときに下へ出す説明。省略すると素材だけが出る。
    * 一覧では書ききれない補足を書く場所で、`alt` とは役割が違う
    * （`alt` は見えない人のための代替、こちらは見えている人への補足）。
@@ -54,6 +62,7 @@ export function Screenshot({
   dark = false,
   video = false,
   priority = false,
+  frame,
   caption,
 }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -106,7 +115,11 @@ export function Screenshot({
     : [];
 
   const renderMedia = (zoom: boolean) => {
-    const mediaClass = zoom ? styles.zoomMedia : styles.media;
+    const mediaClass = zoom
+      ? styles.zoomMedia
+      : frame
+        ? styles.frameMedia
+        : styles.media;
 
     if (video && playable) {
       return (
@@ -159,7 +172,16 @@ export function Screenshot({
           dialogRef.current?.showModal();
         }}
       >
-        {renderMedia(false)}
+        {frame ? (
+          <span
+            className={styles.frame}
+            style={{ "--frame": frame } as React.CSSProperties}
+          >
+            {renderMedia(false)}
+          </span>
+        ) : (
+          renderMedia(false)
+        )}
         <span className={styles.srOnly}>{alt}（クリックで拡大）</span>
       </button>
 

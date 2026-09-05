@@ -27,6 +27,49 @@
   border-color: color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
+/* ============================================================
+   縦横比を揃える枠（一覧に並べるとき用）
+   ============================================================ */
+
+/* ⚠ --frame はインラインで入る（呼び出し側が "16 / 10" などを渡す）。
+   素材の縦横比がまちまちでもカードの高さが揃うようにするための箱で、
+   中の素材は切らずに収める（切ると「見せたい当のもの」が落ちるため）。
+
+   線と角丸は枠が持つ。素材側は .frameMedia で両方とも外している
+   （二重に丸まって内側の角が浮くのを避ける）。 */
+.frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: var(--frame, 16 / 10);
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  /* ⚠ 余白の色。いまの素材はライトのみなので、ライトでは地色（白）と
+     ほぼ一致して余白が見えず、ダークでは意図した letterbox に見える。
+     ダーク素材を入れたら、そのままで両方とも正しくなる。 */
+  background: var(--surface);
+  transition: border-color 0.2s ease;
+}
+
+.trigger:hover .frame {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* ⚠⚠ min-height / min-width の 0 を消さないこと。
+   この要素は .frame（grid）の子なので、grid アイテムの**自動最小サイズ**
+   （min-height: auto）が効き、縦横比から算出した高さが下限として押し込まれる。
+   ⇒ 枠より縦長の素材だけ height: 100% が無視され、枠から溢れて
+   overflow: hidden に切られる（＝ contain のつもりが cover になる）。
+   実測: 1400x967 の素材が 214px の枠の中で 236px になっていた。 */
+.frameMedia {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+
 /* 目には見せず、読み上げにだけ渡す。ボタンの名前が画像の alt だけだと
    「押せる」ことが伝わらないため。 */
 .srOnly {
@@ -152,6 +195,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .media,
+  .frame,
   .close {
     transition: none;
   }
