@@ -211,14 +211,18 @@ export function Screenshot({
               ⚠ 幅は max-width ではなく width で与えること。max-width だけだと
               .panel の justify-items: center で実寸まで縮み、拡大にならない。
 
-              上限は viewport から決める。縦は 84vh に収めたいので、縦横比から
-              幅へ換算して min() に混ぜている ＝ letterbox も歪みも出ない。
+              上限は 3 つの min。
+              ① 88vw … 横にはみ出さない
+              ② 84vh を縦横比で幅へ換算 … 縦にもはみ出さない（letterbox も歪みも出ない）
+              ③ 素材の実寸 … ⚠ これが無いと引き伸ばされてボケる。素材を必要な
+                 部分だけに切ると元が小さくなるので、③ が効く場面は普通にある
+                 （例: 配信画面のコメントは 490px しかなく、②だけだと 2.2 倍になる）。
             */}
             <div
               className={styles.zoomBox}
               style={
                 {
-                  "--zoom-width": `min(88vw, calc(84vh * ${(width / height).toFixed(4)}))`,
+                  "--zoom-width": `min(88vw, calc(84vh * ${(width / height).toFixed(4)}), ${width}px)`,
                 } as React.CSSProperties
               }
             >
