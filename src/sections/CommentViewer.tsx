@@ -1,32 +1,62 @@
 import { Placeholder } from "../components/Placeholder";
+import { Screenshot } from "../components/Screenshot";
 import { Section } from "../components/Section";
 import styles from "./CommentViewer.module.css";
 
-/** 機能が多く、文字だけでは伝わらないので 1 機能 1 画像で並べる。 */
+/**
+ * 機能が多く、文字だけでは伝わらないので 1 機能 1 画像で並べる。
+ *
+ * ⚠ 素材の縦横比は 1.44〜3.99 とばらばら（撮ったウィンドウの形がそれぞれ違う）。
+ * そのまま並べると同じ行で高さが 6 倍違い、ラベルの位置も揃わないので、
+ * `frame` で 16:10 の枠に収めている。中は切らないので、余った分は枠の地色になる。
+ * ⚠ 16:10 に切り揃える案は採れない——#2 / #3 / #4 は横長のウィンドウで撮られており、
+ * 16:10 にするには幅を 30〜50% 削る必要があって「見せたい当のもの」
+ * （読み上げ設定のトグル・投げ銭のバッジ）が落ちる。
+ *
+ * ⚠ ダーク素材はまだ無いので `dark` は付けない（置いてから true にする）。
+ */
 const FEATURES = [
   {
     label: "YouTube と Twitch のコメント同時取得",
-    media: "YouTube と Twitch のコメントが混ざって流れている一覧",
+    name: "cv-multi-platform",
+    width: 1400,
+    height: 967,
+    alt: "コメントビューアの一覧。YouTube と Twitch のコメントが 1 つの一覧に混ざって並び、各行の左に配信サービスのバッジが付いている。上部では両方の接続状態が並んで見える。",
   },
   {
     label: "一目で初見や久しぶりの視聴者がわかる UI",
-    media: "初見さん・久しぶりの視聴者が色分けされているコメント一覧",
+    name: "cv-first-time",
+    width: 1400,
+    height: 632,
+    alt: "コメント一覧。各行の名前の左に「初見」バッジが付いていて、初めて来た視聴者がひと目でわかる。",
   },
   {
     label: "右クリックで気になるコメントを簡単に固定",
-    media: "右クリックメニューからコメントを固定しているところ",
+    name: "cv-pin",
+    width: 1400,
+    height: 351,
+    alt: "コメントを右クリックして出したメニューから「上部に固定」を選ぶところ。固定したコメントは一覧の上に残り続ける。",
   },
   {
     label: "VOICEVOX と連携したコメント読み上げ",
-    media: "読み上げの話者を選んでいる設定画面",
+    name: "cv-voicevox",
+    width: 1400,
+    height: 455,
+    alt: "読み上げの設定画面。VOICEVOX の自動連携、配信サービスごとの読み上げの切り替え、読み上げる文字数の上限、話者とスタイルの選択、試聴ボタンが並んでいる。",
   },
   {
     label: "ワンクリックで配信画面にコメントを表示",
-    media: "配信画面の上にコメントのオーバーレイが乗っている様子",
+    name: "cv-overlay",
+    width: 956,
+    height: 666,
+    alt: "配信画面に重ねたコメントのオーバーレイ。視聴者名と配信サービスのバッジが付いた吹き出しが縦に並んでいる。",
   },
   {
     label: "視聴者ごとのメモ",
-    media: "視聴者にメモを書き込んでいるところ",
+    name: "cv-memo",
+    width: 830,
+    height: 367,
+    alt: "視聴者詳細の「配信者メモ」欄。その視聴者について書き込んだメモが保存されている。",
   },
 ];
 
@@ -89,7 +119,13 @@ export function CommentViewer() {
       <ul className={styles.grid}>
         {FEATURES.map((feature) => (
           <li key={feature.label} className={styles.card}>
-            <Placeholder label={feature.media} ratio="16 / 10" />
+            <Screenshot
+              name={feature.name}
+              width={feature.width}
+              height={feature.height}
+              alt={feature.alt}
+              frame="16 / 10"
+            />
             <p className={styles.label}>{feature.label}</p>
           </li>
         ))}
