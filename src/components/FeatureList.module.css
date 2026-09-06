@@ -3,12 +3,6 @@
   gap: 14px;
 }
 
-.columns {
-  composes: list;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  column-gap: 40px;
-}
-
 .item {
   display: grid;
   grid-template-columns: auto 1fr;

@@ -10,24 +10,14 @@ type Props = {
   title: ReactNode;
   lead: string;
   items: string[];
-  /** 右（または左）に置く絵。<Screenshot> を渡す。 */
+  /** 右に置く絵。<Screenshot> を渡す。 */
   visual: ReactNode;
-  /** 画像を左に置く（機能セクションを 2 つ並べたときに向きを交互にする）。 */
-  reverse?: boolean;
 };
 
-export function FeatureSection({
-  id,
-  eyebrow,
-  title,
-  lead,
-  items,
-  visual,
-  reverse = false,
-}: Props) {
+export function FeatureSection({ id, eyebrow, title, lead, items, visual }: Props) {
   return (
     <section id={id} className={styles.section}>
-      <div className={reverse ? styles.innerReverse : styles.inner}>
+      <div className={styles.inner}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h2 className={styles.title}>{title}</h2>

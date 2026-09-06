@@ -294,9 +294,10 @@ export function CommentViewer() {
           >
             <div className={styles.wideCopy}>
               <p className={styles.wideLabel}>{item.label}</p>
+              {/* ⚠ key に本文を使わない。同じ段落が 2 つあると衝突する。 */}
               {(Array.isArray(item.body) ? item.body : [item.body]).map(
-                (paragraph) => (
-                  <p key={paragraph} className={styles.wideBody}>
+                (paragraph, index) => (
+                  <p key={index} className={styles.wideBody}>
                     {Array.isArray(item.body) ? (
                       paragraph
                     ) : (

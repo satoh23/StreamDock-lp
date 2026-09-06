@@ -37,8 +37,9 @@ export function Faq() {
   return (
     <Section id="faq" eyebrow="よくある質問" title="使う前に気になること" tinted>
       <div className={styles.list}>
-        {FAQS.map((faq) => (
-          <details key={faq.q} className={styles.item}>
+        {/* ⚠ key に設問文を使わない（同じ設問を 2 つ置いた瞬間に片方が消える）。 */}
+        {FAQS.map((faq, index) => (
+          <details key={index} className={styles.item}>
             <summary className={styles.question}>{faq.q}</summary>
             <p className={styles.answer}>
               <Sentences text={faq.a} />

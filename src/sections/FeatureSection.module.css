@@ -11,14 +11,6 @@
   align-items: center;
 }
 
-.innerReverse {
-  composes: inner;
-}
-
-.innerReverse .copy {
-  order: 2;
-}
-
 .copy {
   display: flex;
   flex-direction: column;
@@ -52,15 +44,9 @@
     padding: 72px var(--page-pad);
   }
 
-  .inner,
-  .innerReverse {
+  .inner {
     grid-template-columns: minmax(0, 1fr);
     gap: 36px;
-  }
-
-  /* 画面が狭いときは、向きの入れ替えをやめて常に「文章 → 画像」にする。 */
-  .innerReverse .copy {
-    order: 0;
   }
 
   /* 見出しの明示改行は広い画面での調整なので、狭い画面では自然な折り返しに任せる。 */
