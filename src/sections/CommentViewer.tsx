@@ -238,7 +238,7 @@ export function CommentViewer() {
       eyebrow="内蔵コメントビューア"
       title={
         <>
-          配信に必要な機能を盛り込んだ、
+          配信に必要な機能を盛り込んだ
           <br />
           高機能コメントビューア
         </>

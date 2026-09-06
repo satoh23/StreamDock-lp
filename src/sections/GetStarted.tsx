@@ -16,7 +16,7 @@ const STEPS = [
   },
   {
     step: "3",
-    title: "プリセットにまとめて、起動する",
+    title: "プリセットにまとめて起動する",
     body: "登録したツールをプリセットにまとめます。あとは起動ボタンを押すだけです。",
   },
 ];
@@ -26,7 +26,7 @@ export function GetStarted() {
     <Section
       id="start"
       eyebrow="導入の流れ"
-      title="3 ステップではじめられます。"
+      title="3 ステップではじめられる"
     >
       <ol className={styles.steps}>
         {STEPS.map((item) => (
