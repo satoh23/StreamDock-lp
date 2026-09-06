@@ -1,4 +1,3 @@
-import { Placeholder } from "../components/Placeholder";
 import { Screenshot } from "../components/Screenshot";
 import { Section } from "../components/Section";
 import styles from "./CommentViewer.module.css";
@@ -82,8 +81,8 @@ const FEATURES = [
 type Highlight = {
   label: string;
   body: string;
-  /** 実素材があるとき。public/images/<name>.* を指す。 */
-  asset?: {
+  /** public/images/<name>.* を指す。 */
+  asset: {
     name: string;
     width: number;
     height: number;
@@ -93,10 +92,6 @@ type Highlight = {
     /** ダーク用（<name>-dark.*）を用意してあるか。 */
     dark?: boolean;
   };
-  /** まだ撮っていないとき。枠に出す説明文。 */
-  media?: string;
-  /** 動く素材を想定する枠か。 */
-  motion?: boolean;
 };
 
 /**
@@ -269,20 +264,14 @@ export function CommentViewer() {
               <p className={styles.wideLabel}>{item.label}</p>
               <p className={styles.wideBody}>{item.body}</p>
             </div>
-            {item.asset ? (
-              <Screenshot
-                name={item.asset.name}
-                width={item.asset.width}
-                height={item.asset.height}
-                alt={item.asset.alt}
-                video={item.asset.video}
-                dark={item.asset.dark}
-              />
-            ) : (
-              item.media && (
-                <Placeholder label={item.media} ratio="16 / 10" motion={item.motion} />
-              )
-            )}
+            <Screenshot
+              name={item.asset.name}
+              width={item.asset.width}
+              height={item.asset.height}
+              alt={item.asset.alt}
+              video={item.asset.video}
+              dark={item.asset.dark}
+            />
           </li>
         ))}
       </ul>

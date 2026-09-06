@@ -9,7 +9,7 @@ type Props = {
   title: ReactNode;
   lead: string;
   items: string[];
-  /** 右（または左）に置く絵。実素材なら <Screenshot>、未撮影なら <Placeholder>。 */
+  /** 右（または左）に置く絵。<Screenshot> を渡す。 */
   visual: ReactNode;
   /** 画像を左に置く（機能セクションを 2 つ並べたときに向きを交互にする）。 */
   reverse?: boolean;
