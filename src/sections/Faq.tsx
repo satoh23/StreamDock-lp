@@ -1,5 +1,6 @@
 import { Section } from "../components/Section";
 import styles from "./Faq.module.css";
+import { Sentences } from "../components/Sentences";
 
 const FAQS = [
   {
@@ -31,7 +32,9 @@ export function Faq() {
         {FAQS.map((faq) => (
           <details key={faq.q} className={styles.item}>
             <summary className={styles.question}>{faq.q}</summary>
-            <p className={styles.answer}>{faq.a}</p>
+            <p className={styles.answer}>
+              <Sentences text={faq.a} />
+            </p>
           </details>
         ))}
       </div>

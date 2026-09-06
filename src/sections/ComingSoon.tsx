@@ -1,5 +1,6 @@
 import { Section } from "../components/Section";
 import styles from "./ComingSoon.module.css";
+import { Sentences } from "../components/Sentences";
 
 /** 追加したら `badge` を外して、通常の機能セクションへ移すこと。 */
 const UPCOMING = [
@@ -34,13 +35,15 @@ export function ComingSoon() {
           <li key={item.title} className={styles.card}>
             <span className={styles.badge}>{item.badge}</span>
             <h3 className={styles.title}>{item.title}</h3>
-            <p className={styles.body}>{item.body}</p>
+            <p className={styles.body}>
+              <Sentences text={item.body} />
+            </p>
           </li>
         ))}
       </ul>
 
       <p className={styles.note}>
-        アップデートはアプリが自動で確認します。追加された機能は、アプリの中でお知らせします。
+        <Sentences text="アップデートはアプリが自動で確認します。追加された機能は、アプリの中でお知らせします。" />
       </p>
     </Section>
   );

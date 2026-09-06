@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLatestRelease } from "../hooks/useLatestRelease";
 import { useOS } from "../hooks/useOS";
 import styles from "./FloatingDownload.module.css";
+import { Sentences } from "./Sentences";
 
 /** ヒーローのダウンロードボタンが画面から外れたあたりで出す。 */
 const SHOW_AFTER_PX = 520;
@@ -100,9 +101,13 @@ export function FloatingDownload() {
           </div>
 
           <p className={styles.note}>
-            {release.status === "fallback"
-              ? "最新版の情報を取得できませんでした。ダウンロード一覧のページが開きます。"
-              : "基本無料でお使いいただけます。アカウントの登録は必要ありません。"}
+            <Sentences
+              text={
+                release.status === "fallback"
+                  ? "最新版の情報を取得できませんでした。ダウンロード一覧のページが開きます。"
+                  : "基本無料でお使いいただけます。アカウントの登録は必要ありません。"
+              }
+            />
             {release.version && (
               <span className={styles.version}>最新版 {release.version}</span>
             )}

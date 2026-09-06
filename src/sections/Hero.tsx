@@ -1,6 +1,7 @@
 import { DownloadButtons } from "../components/DownloadButtons";
 import { Screenshot } from "../components/Screenshot";
 import styles from "./Hero.module.css";
+import { Sentences } from "../components/Sentences";
 
 export function Hero() {
   return (
@@ -24,8 +25,7 @@ export function Hero() {
               StreamDock は、配信者向けのツール管理アプリです。
             </p>
             <p className={styles.lead}>
-              使うツールが 10 個でも 100 個でも、ワンクリックで準備完了。
-              すぐに配信を始められます。
+              <Sentences text="使うツールが 10 個でも 100 個でも、ワンクリックで準備完了。すぐに配信を始められます。" />
             </p>
           </div>
 

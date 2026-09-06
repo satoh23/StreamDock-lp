@@ -1,5 +1,6 @@
 import { RELEASES_PAGE_URL } from "../hooks/useLatestRelease";
 import styles from "./Footer.module.css";
+import { Sentences } from "../components/Sentences";
 
 export function Footer() {
   return (
@@ -37,8 +38,7 @@ export function Footer() {
       <div className={styles.legal}>
         <p>読み上げ機能は、音声合成ソフトウェア VOICEVOX と連携します。</p>
         <p>
-          本ページに記載・表示されている会社名・製品名・ロゴは、各提供元の商標または登録商標です。StreamDock
-          はこれらと連携する機能を持ちますが、各提供元と公式に提携しているものではありません。
+          <Sentences text="本ページに記載・表示されている会社名・製品名・ロゴは、各提供元の商標または登録商標です。StreamDock はこれらと連携する機能を持ちますが、各提供元と公式に提携しているものではありません。" />
         </p>
       </div>
     </footer>

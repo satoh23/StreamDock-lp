@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { FeatureList } from "../components/FeatureList";
 import styles from "./FeatureSection.module.css";
+import { Sentences } from "../components/Sentences";
 
 type Props = {
   id: string;
@@ -30,7 +31,9 @@ export function FeatureSection({
         <div className={styles.copy}>
           <p className={styles.eyebrow}>{eyebrow}</p>
           <h2 className={styles.title}>{title}</h2>
-          <p className={styles.lead}>{lead}</p>
+          <p className={styles.lead}>
+            <Sentences text={lead} />
+          </p>
           <FeatureList items={items} />
         </div>
 

@@ -1,6 +1,7 @@
 import { DownloadButtons } from "../components/DownloadButtons";
 import { Section } from "../components/Section";
 import styles from "./GetStarted.module.css";
+import { Sentences } from "../components/Sentences";
 
 const STEPS = [
   {
@@ -32,7 +33,9 @@ export function GetStarted() {
           <li key={item.step} className={styles.step}>
             <span className={styles.number}>{item.step}</span>
             <h3 className={styles.stepTitle}>{item.title}</h3>
-            <p className={styles.stepBody}>{item.body}</p>
+            <p className={styles.stepBody}>
+              <Sentences text={item.body} />
+            </p>
           </li>
         ))}
       </ol>

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import styles from "./Section.module.css";
+import { Sentences } from "./Sentences";
 
 type Props = {
   id?: string;
@@ -21,7 +22,11 @@ export function Section({ id, eyebrow, title, lead, tinted = false, children }: 
         <header className={styles.header}>
           {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
           <h2 className={styles.title}>{title}</h2>
-          {lead && <p className={styles.lead}>{lead}</p>}
+          {lead && (
+            <p className={styles.lead}>
+              <Sentences text={lead} />
+            </p>
+          )}
         </header>
         {children}
       </div>

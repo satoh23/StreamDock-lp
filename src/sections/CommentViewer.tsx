@@ -1,6 +1,7 @@
 import { Screenshot } from "../components/Screenshot";
 import { Section } from "../components/Section";
 import styles from "./CommentViewer.module.css";
+import { Sentences } from "../components/Sentences";
 
 /**
  * 機能が多く、文字だけでは伝わらないので 1 機能 1 画像で並べる。
@@ -80,7 +81,14 @@ const FEATURES = [
 
 type Highlight = {
   label: string;
-  body: string;
+  /**
+   * 文字列で渡すと「。」ごとに改行する（既定）。
+   *
+   * ⚠ 文が多いカードは、全部の句点で折ると 4 行 5 行になって逆に読みにくい。
+   * そのときは**配列**で渡す。要素 1 つが 1 段落になり、**段落の中は改行しない**
+   * （＝どの文をひとまとまりで読ませるかを、書く側が決められる）。
+   */
+  body: string | string[];
   /** public/images/<name>.* を指す。 */
   asset: {
     name: string;
@@ -262,7 +270,17 @@ export function CommentViewer() {
           >
             <div className={styles.wideCopy}>
               <p className={styles.wideLabel}>{item.label}</p>
-              <p className={styles.wideBody}>{item.body}</p>
+              {(Array.isArray(item.body) ? item.body : [item.body]).map(
+                (paragraph) => (
+                  <p key={paragraph} className={styles.wideBody}>
+                    {Array.isArray(item.body) ? (
+                      paragraph
+                    ) : (
+                      <Sentences text={paragraph} />
+                    )}
+                  </p>
+                ),
+              )}
             </div>
             <Screenshot
               name={item.asset.name}

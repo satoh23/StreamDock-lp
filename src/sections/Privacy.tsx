@@ -1,5 +1,6 @@
 import { Section } from "../components/Section";
 import styles from "./Privacy.module.css";
+import { Sentences } from "../components/Sentences";
 
 /** 見出しだけで意味が通る短さにすること（本文は読まれない前提で並べている）。 */
 const POINTS = [
@@ -35,7 +36,9 @@ export function Privacy() {
           <li key={point.label} className={styles.point}>
             <span className={styles.check} aria-hidden="true" />
             <p className={styles.label}>{point.label}</p>
-            <p className={styles.body}>{point.body}</p>
+            <p className={styles.body}>
+              <Sentences text={point.body} />
+            </p>
           </li>
         ))}
       </ul>
