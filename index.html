@@ -10,6 +10,20 @@
          本文は最初から表示されたままになる。⚠ 描画前に実行する必要があるので head に置く。 -->
     <script>
       document.documentElement.classList.add("js");
+
+      // ⚠⚠ 上の 1 行だけでは「スクリプトが読み込めなかった場合」しか守れない。
+      //   **読み込めたが例外で止まった場合**は html.js が付いたまま残り、Reveal が
+      //   opacity: 0 のまま解除されず、ヒーロー以外が全部消える（2026-09-06 に実測）。
+      //   実際に踏んだのは Safari 16.0〜16.3 で、本体バンドルが後方参照の構文エラーで
+      //   パースできなかったケース。原因そのものは直したが、**同じ壊れ方は将来どの
+      //   構文・どの例外でも起こりうる**ので、ここで機械的に受け止める。
+      //   本体は走り出した時点で data-app-started を立てるので、立たなければ class を外す。
+      //   ⚠ 回線が遅くて時間内に立たなかった場合は「出現アニメーションが無いだけ」で、
+      //     本文は読める（隠れたままにするより望ましい）。
+      setTimeout(function () {
+        var root = document.documentElement;
+        if (!root.hasAttribute("data-app-started")) root.classList.remove("js");
+      }, 4000);
     </script>
 
     <title>StreamDock｜配信ツールをまとめて起動・停止できるデスクトップアプリ</title>

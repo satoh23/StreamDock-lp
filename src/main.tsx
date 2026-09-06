@@ -3,6 +3,12 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/global.css";
 
+// ⚠ index.html のインラインスクリプトが「本体が走り出したか」をこの印で見ている
+//   （立たなければ html.js を外して、本文が隠れたままになるのを防ぐ）。
+//   ⚠⚠ **必ずこのファイルの先頭で立てること。** 下の処理が例外を投げても印は残り、
+//     「バンドルはパースできて走り出した」ことだけを表す印として正しく機能する。
+document.documentElement.setAttribute("data-app-started", "");
+
 const container = document.getElementById("root");
 if (!container) throw new Error("#root が見つかりません");
 

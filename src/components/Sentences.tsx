@@ -19,15 +19,26 @@ export function Sentences({ text }: { text: ReactNode }) {
   }
 
   // 「。」の後ろで切る（「。」自体は前の文に残す）。
+  //
+  // ⚠⚠ **後方参照（`split(/(?<=。)/)`）を使わないこと。** Safari 16.4 で入った機能で、
+  //   16.0〜16.3 では正規表現リテラルが**パース時に**構文エラーになる
+  //   ＝このバンドルが 1 行も実行されない。そうなると index.html が付けた `html.js` だけが
+  //   残り、Reveal が opacity: 0 のままヒーロー以外が全部消える（2026-09-06 に実測）。
+  //   Vite の既定ターゲットは `safari16` を含むのに、esbuild は警告も出さない
+  //   （後方参照は原理的に古い構文へ落とせないため）。
   const parts = text
-    .split(/(?<=。)/)
+    .split("。")
+    // 切り離した「。」を戻す。最後の断片の後ろには元から無い。
+    .map((part, index, all) => (index < all.length - 1 ? `${part}。` : part))
     .map((part) => part.trim())
     .filter(Boolean);
 
   return (
     <>
       {parts.map((part, index) => (
-        <Fragment key={part}>
+        // ⚠ key に本文を使わない。同じ文が 2 回出ると衝突して片方が消える。
+        //   並び替えも増減も起きない配列なので index でよい。
+        <Fragment key={index}>
           {index > 0 && <br />}
           {part}
         </Fragment>
