@@ -79,6 +79,26 @@ const FEATURES = [
   },
 ];
 
+type Highlight = {
+  label: string;
+  body: string;
+  /** 実素材があるとき。public/images/<name>.* を指す。 */
+  asset?: {
+    name: string;
+    width: number;
+    height: number;
+    alt: string;
+    /** 動く素材（<name>.webm / .mp4 ＋ <name>-still.png）か。 */
+    video?: boolean;
+    /** ダーク用（<name>-dark.*）を用意してあるか。 */
+    dark?: boolean;
+  };
+  /** まだ撮っていないとき。枠に出す説明文。 */
+  media?: string;
+  /** 動く素材を想定する枠か。 */
+  motion?: boolean;
+};
+
 /**
  * 目玉の 5 つ。上のグリッドと同じ大きさで並べると埋もれるので全幅で見せる。
  *
@@ -87,12 +107,23 @@ const FEATURES = [
  * `startSession` を呼ぶのは `CommentViewerApp` だけ）。コメントビューアで接続して
  * いなければ一度も発火しないので、使う人から見た区切りに合わせてここへ置く。
  */
-const HIGHLIGHTS = [
+const HIGHLIGHTS: Highlight[] = [
   {
     label: "コメントや投げ銭に反応する配信エフェクト",
     body: "決めた言葉が入ったコメントが来たときや、投げ銭が届いたときに、配信画面へ演出を重ねて表示できます。",
-    media: "投げ銭が届いて、配信画面に演出が出るところ",
-    motion: true,
+    // ⚠ ダーク用は用意しない。映しているのは OBS 側のソース（配信画面）で、
+    //   StreamDock の画面ではないため、テーマを変えても見た目が変わらない
+    //   （「ワンクリックで配信画面にコメントを表示」と同じ扱い・依頼者の判断）。
+    // ⚠ ポスター（<name>-still.png）は**先頭フレームから作らないこと**。
+    //   この素材は 0.9 秒でピークに達し、前後は暗転しているので、
+    //   README の手順どおり先頭から取ると真っ黒な静止画になる。
+    asset: {
+      name: "cv-effect",
+      width: 1200,
+      height: 682,
+      video: true,
+      alt: "配信画面に重ねた演出。光の粒がハートの形を描くように広がり、少しずつ消えていく。",
+    },
   },
   {
     label: "投げ銭やコメントで回せるガチャ",
@@ -175,7 +206,20 @@ export function CommentViewer() {
               <p className={styles.wideLabel}>{item.label}</p>
               <p className={styles.wideBody}>{item.body}</p>
             </div>
-            <Placeholder label={item.media} ratio="16 / 10" motion={item.motion} />
+            {item.asset ? (
+              <Screenshot
+                name={item.asset.name}
+                width={item.asset.width}
+                height={item.asset.height}
+                alt={item.asset.alt}
+                video={item.asset.video}
+                dark={item.asset.dark}
+              />
+            ) : (
+              item.media && (
+                <Placeholder label={item.media} ratio="16 / 10" motion={item.motion} />
+              )
+            )}
           </li>
         ))}
       </ul>
