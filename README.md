@@ -182,8 +182,23 @@ ffmpeg -i "$SRC" -vf "$CROP,fps=30" -c:v libx264 -crf 26 -preset slow \
   -pix_fmt yuv420p -movflags +faststart -an public/images/<name>.mp4
 ffmpeg -i "$SRC" -vf "$CROP,fps=30" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 \
   -an public/images/<name>.webm
-ffmpeg -i "$SRC" -vf "$CROP" -frames:v 1 public/images/<name>-still.png
+ffmpeg -ss 0.9 -i "$SRC" -vf "$CROP" -frames:v 1 public/images/<name>-still.png
 ```
+
+⚠⚠ **静止画は「絵がいちばん出ている瞬間」から取ること**（上の `-ss`）。先頭フレームから
+取ると、フェードインで始まる素材では**真っ黒な静止画**になる。この静止画は poster 兼、
+**JavaScript が無いとき・「動きを減らす」設定のときの表示**なので、ここが黒いと中身が消える。
+明るさは次のように測れる（ピークの秒数を `-ss` に入れる）:
+
+```sh
+ffmpeg -v error -i "$SRC" -vf "fps=10,scale=160:-1" /tmp/t_%03d.png
+python3 -c "
+from PIL import Image, ImageStat; import glob
+for i, f in enumerate(sorted(glob.glob('/tmp/t_*.png'))):
+    print(i/10, round(ImageStat.Stat(Image.open(f).convert('L')).mean[0], 2))"
+```
+
+⚠ **暗転で終わる素材は、暗転しきる手前で切る**（`-t`）。残すとループに死んだ時間ができる。
 
 静止画の縦横比を揃えるときは、下の余白だけを落とす:
 
