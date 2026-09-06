@@ -6,6 +6,10 @@
   margin-bottom: 56px;
 }
 
+/* ⚠ 4 段とも**同じ作り**（上から下へ薄れるグラデ＋枠）にして、
+   違いは**色だけ**にしている。作りまで変えると「別の種類のもの」に見え、
+   段が 1 本の流れであることが読み取れなくなる。
+   1 段目はグレー、2 段目以降はアクセント色（下の .stepActive）。 */
 .step {
   position: relative;
   display: flex;
@@ -14,14 +18,18 @@
   padding: 20px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
-  background: var(--surface);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--muted) 12%, transparent),
+    var(--surface)
+  );
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
 }
 
 /* 2 段目以降に色を持たせて「StreamDock が担当する範囲」を示す。
-   1 段目「思いつく」だけは配信者自身がやることなので淡いまま。 */
+   1 段目「思いつく」だけは配信者自身がやることなのでグレーのまま。 */
 .stepActive {
   composes: step;
   color: var(--text);
@@ -129,15 +137,40 @@
   right: 30px;
 }
 
+/* 悩み → 解決の折り返し地点。ページで一度しか言わない結論なので、
+   本文（16px）と同じ大きさでは埋もれる。セクション見出し（最大 36px）とは
+   competing しない 24px に置く。 */
 .conclusion {
-  font-size: 17px;
+  /* ⚠ 上限 24px は動かさない。狭い画面では見出しが 24px まで下がるので、
+     ここも下げないと結論と見出しが同じ大きさになって階層が消える。 */
+  font-size: clamp(20px, 1.6vw + 12px, 24px);
+  font-weight: 600;
   line-height: 1.9;
+  color: var(--text);
   text-align: center;
 }
 
+/* ⚠⚠ **強調は文字色ではなくマーカーの帯でやる。**
+   `color: var(--accent)` にすると、ライトのアクセント `#00a3b5` が
+   この面の地色に対して **2.64:1** しか出ず、24px 太字（＝「大きい文字」）の
+   WCAG AA 3:1 に届かない。ダークは 10.42:1 で通るので、**ライトだけ読みにくい**
+   という一番気づきにくい壊れ方をする。
+   帯にすれば文字は var(--text) のままなので、ライト 10.56:1 / ダーク 7.32:1 で
+   どちらも AAA を超える。
+   ⚠ CTA のグラデ（--btn-launch-bg）はここで使わない。tokens.css の
+   「LP でも主 CTA だけに使う」を守る（使うとダウンロードボタンの特別さが薄まる）。 */
 .strong {
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text);
+  /* ⚠ 折り返させない。狭い画面で「全て解決しま／す！」と割れると、
+     マーカーの帯が 2 行に分断されて線を引き損ねたように見える。
+     入らないときは、この塊ごと次の行へ落ちる。 */
+  white-space: nowrap;
+  background: linear-gradient(
+    transparent 62%,
+    color-mix(in srgb, var(--accent) 38%, transparent) 62%
+  );
+  padding: 0 2px;
 }
 
 /* 2 列に折り返すと「2 → 3」だけ改行をまたぐことになり、矢印の向きが嘘になる。
