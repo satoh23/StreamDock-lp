@@ -28,6 +28,10 @@ export function Footer() {
           <a className={styles.link} href={RELEASES_PAGE_URL}>
             過去のバージョン
           </a>
+          {/* ⚠ 問い合わせ先は FAQ の最後の項目と同じアドレス。片方だけ変えないこと。 */}
+          <a className={styles.link} href="mailto:streamdock.support@gmail.com">
+            お問い合わせ
+          </a>
         </nav>
       </div>
 
