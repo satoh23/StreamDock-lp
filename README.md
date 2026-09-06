@@ -4,7 +4,7 @@
 
 - Frontend: React + TypeScript (Vite)
 - スタイル: CSS Modules（配色トークンは StreamDock 本体の `theme.css` から移植）
-- ホスティング: Cloudflare Pages
+- ホスティング: Cloudflare Workers（静的アセット）… 選定理由は [`docs/decisions.md`](docs/decisions.md)
 
 本体（アプリ本体のソース）は別リポジトリ。配布物は
 [`satoh23/StreamDock-releases`](https://github.com/satoh23/StreamDock-releases) の Releases に置かれる。
@@ -26,7 +26,11 @@ pnpm build      # typecheck + dist/ を生成
 ## 公開 URL の設定（⚠ デプロイ後に必ずやること）
 
 `.env` の `VITE_SITE_URL` が、`canonical` / OGP / `sitemap.xml` の絶対 URL の元になる。
-**Cloudflare Pages のサブドメインが決まったら、ここを実際の URL に直すこと。**
+**デプロイして実際の URL が決まったら、ここを直すこと。**
+
+既定の URL は `https://<worker 名>.<アカウントのサブドメイン>.workers.dev` の形になる
+（worker 名は `wrangler.jsonc` の `name`）。⚠ **アカウントのサブドメインは
+Cloudflare でアカウントを作るまで分からない**ので、いまの `.env` の値は仮置き。
 
 ここが実際の URL と食い違うと、**X や Discord に貼ったときにカードの画像が出ない**
 （クローラーは `og:image` の絶対 URL を取りに行くため）。
@@ -49,15 +53,29 @@ OS 判定・最新リリース取得・スクロール位置のような「ブ�
 必ず `useEffect` の中で読むこと。`useState` の初期値に入れると hydration が失敗し、
 React がページ全体を描き直す（＝プリレンダリングした意味が消える）。
 
-## デプロイ（Cloudflare Pages）
+## デプロイ（Cloudflare Workers）
+
+設定は [`wrangler.jsonc`](wrangler.jsonc) にある。**Worker スクリプトは持たない**
+（静的アセットだけを配信する）ので `main` は書いていない。理由はファイル内のコメント参照。
+
+Cloudflare のダッシュボードでこのリポジトリを繋ぎ、ビルド設定をこうする。
 
 | 設定項目 | 値 |
 | --- | --- |
-| Framework preset | None |
 | Build command | `pnpm build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 
-`main` への push で自動デプロイされる。プルリクエストにはプレビュー URL が付く。
+`main` ブランチへの push で自動デプロイされる。
+
+### ⚠ デプロイ後に必ず確認すること
+
+1. **`.env` の `VITE_SITE_URL`** を実際の URL に直す（上の「公開 URL の設定」）。
+   直さないと X や Discord でカード画像が出ない。
+2. **セキュリティヘッダーが付いているか。** `scripts/prerender.mjs` が `dist/_headers` を
+   毎ビルド生成している。`curl -I <URL>` で `Content-Security-Policy` が返ることを確かめる。
+   ⚠ **CSP の `script-src` は `index.html` のインラインスクリプトのハッシュを含む。**
+   ここがズレると本体スクリプトが弾かれ、ヒーロー以外が真っ白になる。
+3. **ダウンロードボタンが実際のインストーラを指しているか。**
 
 ## ダウンロードボタンについて
 
