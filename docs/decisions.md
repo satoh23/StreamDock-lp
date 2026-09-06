@@ -70,6 +70,21 @@ Pages は廃止されず強制移行も無いが、公式の案内は「greenfie
 失うのは「設定ファイルなしで GUI だけで完結する」手軽さで、代わりに `wrangler.jsonc` を 1 つ持つ。
 得るのは、**将来この LP に動的な処理が要ったときに移行が発生しないこと。**
 
+### 実際にデプロイした結果（2026-09-06）
+
+<https://streamdock-lp.streamdock-support.workers.dev>
+
+デプロイ後に実物で確認したこと。
+
+- セキュリティヘッダー 6 種すべてが返っている（CSP / nosniff / Referrer-Policy /
+  X-Frame-Options / COOP / Permissions-Policy）
+- **CSP の `script-src` ハッシュが、配信されている HTML のインラインスクリプトと
+  一致している**（`_headers` を毎ビルド生成している仕組みが本番でも効いている）
+- 存在しないパスは **404**（`not_found_handling` を既定のままにした判断どおり）
+- `_headers` 自体は配信されない（404）
+- ページが完全に描画され、ダウンロードボタンが実際の `.dmg` / `.exe` を指している
+  （`latest.json` と `.sig` は候補から除外されている）
+
 ### 動画を置くことについて
 
 Cloudflare には非 HTML コンテンツの配信制限（旧 2.8 条）がある。現在は CDN 個別の規約に移り、
